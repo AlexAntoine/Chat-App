@@ -14,6 +14,21 @@ socket.on('message', (message)=>{
     console.log(message);
 });
 
-// socket.on('new-message', (message)=>{
-//     console.log(message);
-// })
+document.querySelector('#send-location').addEventListener('click',()=>{
+   
+    if(!navigator.geolocation){
+        return alert('Geolocation is not supported by your browser'); 
+    }
+
+    navigator.geolocation.getCurrentPosition((position)=>{
+
+        const {latitude, longitude}= position.coords;
+
+        const location ={
+            latitude, longitude
+        }
+       
+        socket.emit('sendLocation', location )
+       
+    });
+});

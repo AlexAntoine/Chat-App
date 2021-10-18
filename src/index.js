@@ -34,6 +34,12 @@ io.on('connection', (socket)=>{
     /* send message to everyone expect the current user connected when a user disconnects */
     socket.on('disconnect', ()=>{
         io.emit('message', 'A user has left');
+    });
+
+    socket.on('sendLocation',({latitude, longitude})=>{
+
+        io.emit('message', `https://google.com/maps?q=${latitude},${longitude}`);
+
     })
 })
 
