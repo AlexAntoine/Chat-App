@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="styles.css">
         
     </head>
 
@@ -13,7 +13,11 @@
     <body>
        <h1>Chat-App</h1>
 
-       <button id="increment">+1</button>
+       <form id="message-form" action="" method="">
+           <input type="text" name="message">
+
+           <button type="submit" id="submit-btn">Submit</button>
+       </form>
 
        <script src="/socket.io/socket.io.js"></script>
        <script src="./js/chat.js"></script>
