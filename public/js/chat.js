@@ -5,7 +5,14 @@ document.querySelector('#message-form').addEventListener('submit',(response)=>{
 
     const message = response.target.elements.message.value;
 
-    socket.emit('sendMessage', message)
+    socket.emit('sendMessage', message, (error)=>{
+        
+        if(error)
+        {
+           return console.log(error)
+        }
+        console.log('the message was delivered');
+    })
 
 });
 
@@ -28,7 +35,11 @@ document.querySelector('#send-location').addEventListener('click',()=>{
             latitude, longitude
         }
        
-        socket.emit('sendLocation', location )
+        socket.emit('sendLocation', location, (message)=>{
+
+            console.log('Client: location was sent.');
+            console.log(message);
+        })
        
     });
 });
