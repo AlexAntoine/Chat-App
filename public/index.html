@@ -32,7 +32,7 @@
        <script id="message-template" type="text/html">
 
             <div>
-                <p>{{message}}</p>
+                <p>{{createdAt}} - {{message}}</p>
             </div>
 
        </script>
@@ -40,7 +40,8 @@
        <script id="location-template" type="text/html">
 
             <div>
-                <a href="{{location}}" target="_blank">My Location</a>
+                <p>{{createdAt}} - <a href="{{location}}" target="_blank">My Location</a></p>
+                
             </div>
 
         </script>

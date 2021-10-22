@@ -2,7 +2,8 @@ const path = require('path');
 const http = require('http');
 const express = require('express')
 const socketIo = require('socket.io');
-const Filter = require('bad-words')
+const Filter = require('bad-words');
+const {generateMessage, generateLocationMessage} =  require('./utils/messages');
 
 const app = express();
 
@@ -20,10 +21,10 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', (socket)=>{
 
     /* send message to front ent */
-    socket.emit('message', 'Welcome!')
+    socket.emit('message', generateMessage('Welcome!'))
 
     /* send message to everyone expect the current user connected when new user is connected */
-    socket.broadcast.emit('message', 'a new user has joined');
+    socket.broadcast.emit('message', generateMessage('A new user has joined'));
 
     /* Receives message from user */
     socket.on('sendMessage', (message, callback)=>{
@@ -37,18 +38,18 @@ io.on('connection', (socket)=>{
 
 
         /* send message to everyone connected */
-        io.emit('message', message);
+        io.emit('message', generateMessage(message));
         callback();
     });
 
     /* send message to everyone expect the current user connected when a user disconnects */
     socket.on('disconnect', ()=>{
-        io.emit('message', 'A user has left');
+        io.emit('message', generateMessage('A user has left'));
     });
 
     socket.on('sendLocation',({latitude, longitude}, callback)=>{
 
-        io.emit('locationMessage', `https://google.com/maps?q=${latitude},${longitude}`);
+        io.emit('locationMessage',generateLocationMessage(`https://google.com/maps?q=${latitude},${longitude}`) );
 
         callback('Server: Server recieved location.');
 
