@@ -1,46 +1,68 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Chat-App</title>
+        <title>Chat App</title>
+
+        <link rel="icon" href="./img/favicon.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="styles.css">
+        <!-- <link rel="stylesheet" href="./css/styles.css"> -->
+        <link rel="stylesheet" href="./css/styles.min.css">
         
     </head>
 
 
     <body>
-       <h1>Chat-App</h1>
+        <div class="chat">
 
-       <div id="messages">
+            <div class="chat__sidebar"></div>
 
-       </div>
+            <div class="chat__main">
 
-       <div id="location">
+                <div id="messages" class="chat__messages"></div>
+         
+                <div id="location"></div>
+                
+                <div class="compose">
 
+                    <form id="message-form" action="" method="">
+                        <input type="text" name="message">
+             
+                        <button type="submit" id="submit-btn">Submit</button>
+                    </form>
+             
+                    <button id="send-location">Share Location</button>
+                </div>
+                
+         
+            </div>
         </div>
 
-       <form id="message-form" action="" method="">
-           <input type="text" name="message">
 
-           <button type="submit" id="submit-btn">Submit</button>
-       </form>
+        <h1>Chat-App</h1>
 
-       <button id="send-location">Share Location</button>
-
+      
        <script id="message-template" type="text/html">
 
-            <div>
-                <p>{{createdAt}} - {{message}}</p>
+            <div class="message">
+                <p>
+                    <span class="message__name">Alex</span>
+                    <span class="message__meta">{{createdAt}}</span>
+                </p>
+                <p> {{message}}</p>
             </div>
 
        </script>
 
        <script id="location-template" type="text/html">
 
-            <div>
-                <p>{{createdAt}} - <a href="{{location}}" target="_blank">My Location</a></p>
+            <div class="message">
+
+                <span class="message__name">Alex</span>
+                <span class="message__meta">{{createdAt}}</span>
+
+                <p><a href="{{location}}" target="_blank">My Location</a></p>
                 
             </div>
 

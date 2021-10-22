@@ -51,7 +51,7 @@ socket.on('locationMessage', (message)=>{
 
        location:message.location,
        createdAt: moment(message.createdAt).format('h:mm a'),
-       
+
     });
 
     $location.insertAdjacentHTML('beforeend', html);
