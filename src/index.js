@@ -16,15 +16,20 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath));
 
+/*
+Messages from server to client:
+
+socket.emit() "connected client"
+io.emit() "every connected client"
+socket.broadcast.emit() "every connect client except for the initial client"
+socket.broadcast.to.emit() "send event to event to everyone expect to the initial client in a specific room"
+io.to.emit() "emits an event to everybody in a specific room"
+
+ */
+
 
 /* Connect to socket io */
 io.on('connection', (socket)=>{
-
-    /* send message to front ent */
-    socket.emit('message', generateMessage('Welcome!'))
-
-    /* send message to everyone expect the current user connected when new user is connected */
-    socket.broadcast.emit('message', generateMessage('A new user has joined'));
 
     /* Receives message from user */
     socket.on('sendMessage', (message, callback)=>{
@@ -38,7 +43,7 @@ io.on('connection', (socket)=>{
 
 
         /* send message to everyone connected */
-        io.emit('message', generateMessage(message));
+        io.to('Boston').emit('message', generateMessage(message));
         callback();
     });
 
@@ -53,6 +58,16 @@ io.on('connection', (socket)=>{
 
         callback('Server: Server recieved location.');
 
+    });
+
+    socket.on('join',({username, room})=>{
+
+        //can only use this on the server
+        socket.join(room);
+
+        socket.emit('message', generateMessage('Welcome!'))
+
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined the chat!`));
     })
 })
 
