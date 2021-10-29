@@ -43,7 +43,7 @@ io.on('connection', (socket)=>{
 
 
         /* send message to everyone connected */
-        io.to('Boston').emit('message', generateMessage(message));
+        io.to('boston').emit('message', generateMessage(message));
         callback();
     });
 

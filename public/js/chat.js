@@ -17,10 +17,6 @@ const locationTemplate = document.querySelector('#location-template').innerHTML;
 
 //Options
 const {username, room} = Qs.parse(location.search,{ ignoreQueryPrefix: true });
-const test = Qs.parse(location.search, { ignoreQueryPrefix: true });
-
-console.log('Test: ',JSON.stringify(test));
-
 
 $messageForm.addEventListener('submit',(response)=>{
     response.preventDefault();
@@ -37,7 +33,7 @@ $messageForm.addEventListener('submit',(response)=>{
         },1000);
 
        $messageFormInput.value = '';
-        $messageFormInput.focus();
+       $messageFormInput.focus();
        
 
         if(error)
