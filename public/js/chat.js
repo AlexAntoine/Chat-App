@@ -50,7 +50,7 @@ socket.on('locationMessage', (message)=>{
     console.log(message);
 
     const html = Mustache.render(locationTemplate,{
-
+       username: message.username,
        location:message.location,
        createdAt: moment(message.createdAt).format('h:mm a'),
 
@@ -59,12 +59,14 @@ socket.on('locationMessage', (message)=>{
     $location.insertAdjacentHTML('beforeend', html);
 })
 
-socket.on('message', ({text, createdAt})=>{
+socket.on('message', ({username, text, createdAt})=>{
 
     // console.log(message);
 
     const html = Mustache.render(messageTemplates,{
-        message: text,
+        username,
+        text,
+        // message: text,
         createdAt: moment(createdAt).format('h:mm a') 
     });
     
@@ -108,6 +110,6 @@ socket.emit('join', {username, room}, (error)=>{
     if(error){
         alert(error);
 
-        location.href = '/';
+        location.href = '/'; 
     }
 }); 
