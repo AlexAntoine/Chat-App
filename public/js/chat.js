@@ -1,18 +1,18 @@
 const socket = io();
 
 //Elements
-
 const $messageForm = document.querySelector('#message-form');
 const $messageFormInput = $messageForm.querySelector('input');
 const $messageFormButton = $messageForm.querySelector('button');
-
 const $sendLocationButton = document.querySelector('#send-location');
 
 const $messages = document.querySelector('#messages');
 const $location = document.querySelector('#location');
 
+//Templates
 const messageTemplates = document.querySelector('#message-template').innerHTML;
 const locationTemplate = document.querySelector('#location-template').innerHTML;
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
 
 
 //Options
@@ -24,13 +24,15 @@ $messageForm.addEventListener('submit',(response)=>{
     const message = response.target.elements.message.value;
 
     // disable form when submitted
-    $messageFormButton.setAttribute('disabled','disabled');
+
+    // $messageFormButton.setAttribute('disabled','disabled');
 
     socket.emit('sendMessage', message, (error)=>{
         //enable form
-        setTimeout(()=>{
-            $messageFormButton.removeAttribute('disabled');
-        },1000);
+
+        // setTimeout(()=>{
+        //     $messageFormButton.removeAttribute('disabled');
+        // },1000);
 
        $messageFormInput.value = '';
        $messageFormInput.focus();
@@ -57,6 +59,18 @@ socket.on('locationMessage', (message)=>{
     });
 
     $location.insertAdjacentHTML('beforeend', html);
+});
+
+socket.on('roomData',({room, users})=>{
+
+    const html = Mustache.render(sidebarTemplate,{
+        room,
+        users
+    });
+
+    document.querySelector('#sidebar').innerHTML = html
+    console.log(room);
+    console.log(users);
 })
 
 socket.on('message', ({username, text, createdAt})=>{
