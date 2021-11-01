@@ -5,7 +5,6 @@ const socketIo = require('socket.io');
 const Filter = require('bad-words');
 const {generateMessage, generateLocationMessage} =  require('./utils/messages');
 const {addUser, removeUser, getUser, getUsersInRoom} = require('./utils/user');
-const { isRegExp } = require('util');
 
 const app = express();
 
