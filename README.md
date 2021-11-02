@@ -1,6 +1,6 @@
 # Welcome to Chat-App
 
-Node.Js application that allows user to enter a room an chat with other uses in that room
+Node.Js application that allows user to enter a chat room and communicate with others
 
 ## Install
 
