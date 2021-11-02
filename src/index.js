@@ -4,6 +4,7 @@ const express = require('express')
 const socketIo = require('socket.io');
 const Filter = require('bad-words');
 const {generateMessage, generateLocationMessage} =  require('./utils/messages');
+const {addUser, removeUser, getUser, getUsersInRoom} = require('./utils/user');
 
 const app = express();
 
@@ -31,6 +32,30 @@ io.to.emit() "emits an event to everybody in a specific room"
 /* Connect to socket io */
 io.on('connection', (socket)=>{
 
+    socket.on('join',({username, room}, callback)=>{
+
+       const {error, user} =  addUser({id:socket.id,username, room})
+
+       if(error){
+           return callback(error)
+       }
+
+        //can only use this on the server
+        socket.join(user.room);
+
+        socket.emit('message', generateMessage('Admin','Welcome!'));
+
+        socket.broadcast.to(user.room).emit('message', generateMessage('Admin ',`${user.username} has joined the chat!`));
+
+        io.to(user.room).emit('roomData',{
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        });
+
+
+        callback();
+    }) 
+
     /* Receives message from user */
     socket.on('sendMessage', (message, callback)=>{
 
@@ -41,34 +66,40 @@ io.on('connection', (socket)=>{
             return callback('profanity is not allowed')
         }
 
+        const user = getUser(socket.id);
+
 
         /* send message to everyone connected */
-        io.to('boston').emit('message', generateMessage(message));
+        io.to(user.room).emit('message', generateMessage(user.username,message));
         callback();
     });
 
     /* send message to everyone expect the current user connected when a user disconnects */
     socket.on('disconnect', ()=>{
-        io.emit('message', generateMessage('A user has left'));
+
+        const user = removeUser(socket.id)
+
+        if(user){
+            io.to(user.room).emit('message', generateMessage('Admin',`${user.username} has left`));
+            io.to(user.room).emit({
+                room: user.room,
+                user: getUsersInRoom(user.room)
+            });
+        }
+        
     });
 
     socket.on('sendLocation',({latitude, longitude}, callback)=>{
 
-        io.emit('locationMessage',generateLocationMessage(`https://google.com/maps?q=${latitude},${longitude}`) );
+        const user = getUser(socket.id);
+
+        io.to(user.room).emit('locationMessage',generateLocationMessage(user.username, `https://google.com/maps?q=${latitude},${longitude}`) );
 
         callback('Server: Server recieved location.');
 
     });
 
-    socket.on('join',({username, room})=>{
-
-        //can only use this on the server
-        socket.join(room);
-
-        socket.emit('message', generateMessage('Welcome!'))
-
-        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined the chat!`));
-    })
+   
 })
 
 server.listen(port, () => {

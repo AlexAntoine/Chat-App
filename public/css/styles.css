@@ -133,6 +133,11 @@ button:disabled {
     color: #0070CC;
 }
 
+/* added by me */
+#location{
+    margin-left: 24px;
+}
+
 /* Message Composition Styles */
 
 .compose {
